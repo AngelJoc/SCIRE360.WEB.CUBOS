@@ -71,10 +71,95 @@
     </script>
     <script src="~/Scripts/ControlLayout.js"></script>
     @Scripts.Render("~/bundles/SyntaxHighlighter/codeHighlight")
+    <style>
+        .titleCubo {
+            color: #222b45;
+            font-family: Open Sans, sans-serif;
+            font-weight: 600;
+            font-size: 40px;
+        }
+
+        .custom.wj-flexgrid {
+            border: black 2px solid;
+            border-radius: 0;
+            margin-top: 15px;
+        }
+
+        .custom .wj-topleft .wj-cell {
+            background: #B89EDE;
+            color: #fff;
+        }
+
+        .custom .wj-colheaders .wj-cell {
+            background: #3FC1F4;
+            color: #fff;
+            text-align: center !important;
+        }
+
+        .custom .wj-rowheaders .wj-cell {
+            background: #3FC1F4;
+            color: #fff;
+        }
+
+        .custom .wj-alt {
+            font-style: italic;
+        }
+
+        .custom .wj-group:not(.wj-state-selected):not(.wj-state-multi-selected) {
+            font-weight: bold;
+            background-color: darkseagreen;
+        }
+
+        .custom .wj-glyph-down-right {
+            color: green;
+        }
+
+        .custom .wj-glyph-right {
+            color: green;
+        }
+
+        .custom .wj-state-selected {
+            border: #B89EDE 2px solid;
+        }
+
+        .custom .wj-state-multi-selected {
+            border: #B89EDE 2px solid;
+        }
+
+        .custom .wj-grid-editor {
+            color: #B89EDE;
+        }
+
+        /*.custom .wj-glyph-up {
+            color: blueviolet;
+        }
+
+        .custom .wj-glyph-down {
+            color: blueviolet;
+        }*/
+
+        .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+            color: #B89EDE;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+
+        .nav-tabs .nav-link {
+            color: #8f9bb3;
+            border: 1px solid transparent;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+        }
+                        
+    </style>
 </head>
 <body>
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <nav style="position: absolute !important" class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="background: #ffffff">
             <a class="navbar-brand brand-logo" style="padding-top:5%" href="#">
                 <img style="width: 150px; height: 100%;" src="~/Image/Scire 360.png" />
@@ -99,7 +184,7 @@
             <!-- DataTables Example -->
             <div class="card mb-0">
                 <div class="card-header" style="text-align: center; background:#ffffff">
-                    <h4 style="color: #987CC8"><b>Cubo de cuentas corrientes</b></h4>
+                    <h4 class="titleCubo"><b>Cubo de cuentas corrientes</b></h4>
                 </div>
 
                 <div class="card-body">
@@ -108,7 +193,7 @@
                             <div class="row">
                             </div>
                             <div class="row">
-                                <h4><i><b style="color: #3FC1F4">CUBO OLAP</b> | <span style="font-size: 12px;">Mediante esta pantalla podrá diseñar y gráficar el tipo de reporte que se desea</span></i></h4>
+                                <h4><i><b style="color: #3FC1F4">CUBO OLAP</b> | <span style="color: #187691; font-size: 12px;">Mediante esta pantalla podrá diseñar y gráficar el tipo de reporte que se desea</span></i></h4>
                             </div>
                             <br />
                         </div>
@@ -162,10 +247,10 @@
                                 </div>
                                 <div class="table-responsive">
                                     <div class="col-sm-12 col-md-12">
-                                        @(Html.C1().PivotGrid().Id("indexGrid")
+                                        @(Html.C1().PivotGrid().Id("indexGrid").CssClass("custom")
                                             .ItemsSourceId("indexEngine")
                                             .OutlineMode(false)
-                                            .ShowValueFieldHeaders(true).CssStyle("font-size", "8px"))
+                                            .ShowValueFieldHeaders(true).CssStyle("font-size", "18px"))
                                         @*<p>
                                 <span style="vertical-align:top; color:black;">
                                     OutlineMode&nbsp;<input id="outlineMode" type="checkbox" onchange="toggleOulineMode(event)" style="margin-right:5em;" />

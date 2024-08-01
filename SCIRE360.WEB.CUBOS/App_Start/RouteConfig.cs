@@ -17,7 +17,7 @@ namespace SCIRE360.WEB.CUBOS
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Autenticate", action = "Login", id = UrlParameter.Optional }
+                defaults: new { controller = "Cubo", action = "Index", id = UrlParameter.Optional }
             );
         }
     }
