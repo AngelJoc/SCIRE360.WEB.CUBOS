@@ -3093,6 +3093,7 @@
     <Content Include="Views\Cubo\Cubo_Vacaciones.cshtml" />
     <Content Include="Views\CuboMaster\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\scire360AlvisoftCubos - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\scire360Cubos - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
