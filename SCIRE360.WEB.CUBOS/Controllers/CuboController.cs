@@ -929,13 +929,13 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
         private async Task cargarDiseno(string disenoCuboId)
         {
+            Session["disenoCuboId"] = disenoCuboId;
             if (disenoCuboId == "0")
             {
                 Session["disenoCubo"] = "";
                 return;
             }
 
-            Session["disenoCuboId"] = disenoCuboId;
             TblUsuarioNE ProcUsuario = new TblUsuarioNE();
             var response = await ProcUsuario.getDisenoCubo(Session["iToken"].ToString(), disenoCuboId);
             if (response.result == 1)

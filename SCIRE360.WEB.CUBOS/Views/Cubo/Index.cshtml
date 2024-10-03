@@ -234,11 +234,14 @@
                                 <p></p>
                                 <div class="col-sm-12 col-md-12" style="text-align:right">
                                     <!--<button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="loadView()">
-                                        CARGAR VISTA
-                                    </button>-->
+                                            CARGAR VISTA
+                                        </button>-->
+                                    @if (@Session["disenoCuboId"].ToString() != "0")
+                                    {
                                     <button type="button" class="btn btn-info" style="font-size:13px;font-weight:bold; float:right; width:15%; margin-left: 10px" id="btnGuardar">
                                         GUARDAR VISTA
                                     </button>
+                                    }
                                     <button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="excelExport()">
                                         EXPORTAR EXCEL
                                     </button>
@@ -246,9 +249,9 @@
                                 <div class="table-responsive" style="text-align:center">
                                     <div class="col-sm-12 col-md-12">
                                         @(Html.C1().PivotGrid().Id("indexGrid").CssClass("custom")
-        .ItemsSourceId("indexEngine")
-        .OutlineMode(false)
-        .ShowValueFieldHeaders(true).CssStyle("font-size", "18px")
+                                            .ItemsSourceId("indexEngine")
+                                            .OutlineMode(false)
+                                            .ShowValueFieldHeaders(true).CssStyle("font-size", "18px")
                                             )
                                     </div>
 
@@ -296,7 +299,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
     <script type="text/javascript">
         window.onload = function () {
-            if ("@Session["disenoCubo"].ToString()" != "") {
+            if ("@Session["disenoCubo"].ToString()" != "" && "@Session["disenoCuboId"].ToString()" != "0") {
                 loadView();
             }
         };

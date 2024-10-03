@@ -244,9 +244,12 @@
                             <div class="col-sm-12">
                                 <p></p>
                                 <div class="col-sm-12 col-md-12" style="text-align:right">
-                                    <button type="button" class="btn btn-info" style="font-size:13px;font-weight:bold; float:right; width:15%; margin-left: 10px" id="btnGuardar">
-                                        GUARDAR VISTA
-                                    </button>
+                                    @if (@Session["disenoCuboId"].ToString() != "0")
+                                    {
+                                        <button type="button" class="btn btn-info" style="font-size:13px;font-weight:bold; float:right; width:15%; margin-left: 10px" id="btnGuardar">
+                                            GUARDAR VISTA
+                                        </button>
+                                    }
                                     <button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="excelExport()">
                                         EXPORTAR EXCEL
                                     </button>
