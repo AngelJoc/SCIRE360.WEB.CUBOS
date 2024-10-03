@@ -235,10 +235,15 @@
                             </div>
                         </div>
                         <div class="tab-pane active" id="home2" role="tabpanel" aria-labelledby="home2-tab" aria-selected="true">
+                            <div id="divNotification">
+
+                            </div>
                             <div class="col-sm-12">
                                 <p></p>
                                 <div class="col-sm-12 col-md-12" style="text-align:right">
-
+                                    <button type="button" class="btn btn-info" style="font-size:13px;font-weight:bold; float:right; width:15%; margin-left: 10px" id="btnGuardar">
+                                        GUARDAR VISTA
+                                    </button>
                                     <button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="excelExport()">
                                         EXPORTAR EXCEL
                                     </button>
@@ -305,31 +310,78 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
     <script type="text/javascript">
         window.onload = function () {
+            if ("@Session["disenoCubo"].ToString()" != "") {
+                loadView();
+            }
         };
         function saveView() {
             var ng = c1.getService('indexEngine');
             if (ng && ng.isViewDefined) {
-                localStorage.viewDefinition = ng.viewDefinition;
+                saveCubo(ng.viewDefinition);
+                console.log(ng.viewDefinition);
+                //localStorage.viewDefinition = ng.viewDefinition;
             }
         }
+        function saveCubo(diseno) {
+            try {
+                let datos = {
+                    Diseno: diseno
+                };
+
+                $.post("SaveCubo", datos).done(function (e) {
+                    console.log(e);
+                    if (e.result === 1) {
+                        $("#divNotification").html("<div class=\"alert alert-success\" role=\"alert\"><small><b>Operación exitosa</b></small></div>");
+                        $("#divNotification").fadeTo(5000, 500).slideUp(500, function () {
+                            $("#divNotification").slideUp(500);
+                        });
+                    }
+                    else {
+                        $("#divNotification").html("<div class=\"alert alert-warning\" role=\"alert\"><small><b>" + e.message + "</b></small></div>");
+                        $("#divNotification").fadeTo(5000, 500).slideUp(500, function () {
+                            $("#divNotification").slideUp(500);
+                        });
+                    }
+                });
+            } catch (e) {
+                throw e;
+            }
+
+            // search();
+        }
+        $("#btnGuardar").on('click', function () {
+            saveView();
+        });
         function loadView() {
             var ng = c1.getService('indexEngine');
-            if (ng && localStorage.viewDefinition) {
-                ng.viewDefinition = localStorage.viewDefinition;
-                var cmbRowTotals = wijmo.Control.getControl('#RowTotals');
-                if (cmbRowTotals) {
-                    cmbRowTotals.selectedValue = ng.showRowTotals;
-                }
+            if (ng) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("getView", "Cubo")',
+                    data: '{}',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (success) {
+                        ng.viewDefinition = success;
+                        var cmbRowTotals = wijmo.Control.getControl('#RowTotals');
+                        if (cmbRowTotals) {
+                            cmbRowTotals.selectedValue = ng.showRowTotals;
+                        }
 
-                var cmbColTotals = wijmo.Control.getControl('#ColTotals');
-                if (cmbColTotals) {
-                    cmbColTotals.selectedValue = ng.showColumnTotals;
-                }
+                        var cmbColTotals = wijmo.Control.getControl('#ColTotals');
+                        if (cmbColTotals) {
+                            cmbColTotals.selectedValue = ng.showColumnTotals;
+                        }
 
-                var chkShowZeros = document.getElementById('ColTotals');
-                if (chkShowZeros) {
-                    chkShowZeros.checked = ng.showZeros;
-                }
+                        var chkShowZeros = document.getElementById('ColTotals');
+                        if (chkShowZeros) {
+                            chkShowZeros.checked = ng.showZeros;
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(textStatus);
+                    }
+                });
             }
         }
         function excelExport() {

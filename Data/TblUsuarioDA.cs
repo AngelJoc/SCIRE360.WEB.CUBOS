@@ -248,5 +248,70 @@ namespace Alvisoft.DataAccessLayer
 
             return lista;
         }
+
+        public async Task<RespuestaBE> getDisenoCubo(string token, string disenoCuboId)
+        {
+            RespuestaBE oR = new RespuestaBE();
+
+            try
+            {
+                HttpClientHandler _clientHandlerGQ = new HttpClientHandler();
+                _clientHandlerGQ.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                using (var httpClient = new HttpClient(_clientHandlerGQ, false))
+                {
+                    httpClient.Timeout = TimeSpan.FromMinutes(5);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", token/*Session["iToken"].ToString()*/);
+                    string url = ConfigurationSettings.AppSettings["apiRest"].ToString() + "DisenoCubo/" + disenoCuboId;
+                    using (var response = await httpClient.GetAsync(url))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        oR = JsonConvert.DeserializeObject<RespuestaBE>(apiResponse);
+                    }
+
+                    httpClient.Dispose();
+                    _clientHandlerGQ.Dispose();
+                }
+            }
+            catch (HttpException ex)
+            {
+                oR.result = 0;
+                oR.message = ex.Message;
+            }
+
+            return oR;
+        }
+
+        public async Task<RespuestaBE> saveCubo(string token, DisenoCubo ent)
+        {
+            RespuestaBE oR = new RespuestaBE();
+
+            try
+            {
+                StringContent _content = new StringContent(JsonConvert.SerializeObject(ent), Encoding.UTF8, "application/json");
+                HttpClientHandler _clientHandlerGQ = new HttpClientHandler();
+                _clientHandlerGQ.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                using (var httpClient = new HttpClient(_clientHandlerGQ, false))
+                {
+                    httpClient.Timeout = TimeSpan.FromMinutes(5);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", token/*Session["iToken"].ToString()*/);
+                    string url = ConfigurationSettings.AppSettings["apiRest"].ToString() + "DisenoCubo";
+                    using (var response = await httpClient.PutAsync(url, _content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        oR = JsonConvert.DeserializeObject<RespuestaBE>(apiResponse);
+                    }
+
+                    httpClient.Dispose();
+                    _clientHandlerGQ.Dispose();
+                }
+            }
+            catch (HttpException ex)
+            {
+                oR.result = 0;
+                oR.message = ex.Message;
+            }
+
+            return oR;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using C1.Web.Mvc.Olap;
 using Entidad;
+using Entidad.Entity;
 using Negocio;
+using Newtonsoft.Json;
 using SCIRE360.WEB.CUBOS.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
         };
 
         // GET: Cubo
-        public async Task<ActionResult> Index(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico)
+        public async Task<ActionResult> Index(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
             Session["corpotareId"] = corpotareId;
@@ -78,6 +80,9 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
                 cubos = Session["cubo"].ToString();
                 ddl_graficos = Session["ddl_grafico"].ToString();
+                
+                await cargarDiseno(disenoCuboId);
+
                 if (cubos == "CuboCalculo")
                 {
                     TblUsuarioNE ProcUsuario = new TblUsuarioNE();
@@ -331,7 +336,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             return View();
 
         }
-        public async Task<ActionResult> Cubo_Datos(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico)
+        public async Task<ActionResult> Cubo_Datos(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
             Session["corpotareId"] = corpotareId;
@@ -366,6 +371,9 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
                 cubos = Session["cubo"].ToString();
                 ddl_graficos = Session["ddl_grafico"].ToString();
+
+                await cargarDiseno(disenoCuboId);
+
                 if (cubos == "CuboCalculo")
                 {
                     TblUsuarioNE tblNE = new TblUsuarioNE();
@@ -499,7 +507,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_Padron(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico)
+        public async Task<ActionResult> Cubo_Padron(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
 
@@ -535,6 +543,9 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
                 cubos = Session["cubo"].ToString();
                 ddl_graficos = Session["ddl_grafico"].ToString();
+
+                await cargarDiseno(disenoCuboId);
+
                 if (cubos == "CuboCalculo")
                 {
                     TblUsuarioNE Proc = new TblUsuarioNE();
@@ -669,7 +680,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_CuentasCorrientes(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico)
+        public async Task<ActionResult> Cubo_CuentasCorrientes(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
         {
 
             Session["iToken"] = "adadadadadawdaw";
@@ -705,6 +716,9 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
                 cubos = Session["cubo"].ToString();
                 ddl_graficos = Session["ddl_grafico"].ToString();
+
+                await cargarDiseno(disenoCuboId);
+
                 if (cubos == "CuboCalculo")
                 {
                     TblUsuarioNE Proc = new TblUsuarioNE();
@@ -838,7 +852,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_Vacaciones(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico)
+        public async Task<ActionResult> Cubo_Vacaciones(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
 
@@ -874,6 +888,9 @@ namespace SCIRE360.WEB.CUBOS.Controllers
 
                 cubos = Session["cubo"].ToString();
                 ddl_graficos = Session["ddl_grafico"].ToString();
+
+                await cargarDiseno(disenoCuboId);
+
                 if (cubos == "CuboVacaciones")
                 {
                     TblUsuarioNE Proc = new TblUsuarioNE();
@@ -910,5 +927,50 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             return View();
         }
 
+        private async Task cargarDiseno(string disenoCuboId)
+        {
+            if (disenoCuboId == "0")
+            {
+                Session["disenoCubo"] = "";
+                return;
+            }
+
+            Session["disenoCuboId"] = disenoCuboId;
+            TblUsuarioNE ProcUsuario = new TblUsuarioNE();
+            var response = await ProcUsuario.getDisenoCubo(Session["iToken"].ToString(), disenoCuboId);
+            if (response.result == 1)
+            {
+                DisenoCubo disenoCubo = JsonConvert.DeserializeObject<DisenoCubo>(response.data.ToString());
+                Session["disenoCubo"] = disenoCubo.Diseno;
+            }
+            else
+            {
+                Session["disenoCubo"] = "";
+            }
+        }
+        [HttpPost]
+        public ActionResult getView()
+        {
+            return Json(Session["disenoCubo"]);
+        }
+        [HttpPost]
+        public async Task<ActionResult> SaveCubo(DisenoCubo ent)
+        {
+            RespuestaBE oR = new RespuestaBE();
+            
+            TblUsuarioNE ProcUsuario = new TblUsuarioNE();
+            var response = await ProcUsuario.getDisenoCubo(Session["iToken"].ToString(), Session["disenoCuboId"].ToString());
+            if (response.result == 1)
+            {
+                DisenoCubo disenoCubo = JsonConvert.DeserializeObject<DisenoCubo>(response.data.ToString());
+                disenoCubo.Diseno = ent.Diseno;
+                oR = await ProcUsuario.saveCubo(Session["iToken"].ToString(), disenoCubo);
+            }
+            else
+            {
+                oR = response;
+            }
+            return Json(oR, JsonRequestBehavior.AllowGet);
+        }
     }
 }

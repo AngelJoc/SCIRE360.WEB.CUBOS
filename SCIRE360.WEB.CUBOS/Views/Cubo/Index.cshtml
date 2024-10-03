@@ -157,7 +157,6 @@
     
 </head>
 <body>
-    <!-- partial:partials/_navbar.html -->
     <nav style="position: absolute !important" class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="background: #ffffff">
             <a class="navbar-brand brand-logo" style="padding-top:5%" href="#">
@@ -167,20 +166,10 @@
                 <img style="width: 150px; height: 100%;" src="~/Image/favicon.png" />
             </a>
         </div>
-
     </nav>
 
-    <!-- partial -->
     <div class="">
-
-        <!-- partial -->
-        @*<div class="main-panel">
-            <div class="content-wrapper">*@
-
-
         <div class="col-lg-12 grid-margin-lg-0  grid-margin">
-
-            <!-- DataTables Example -->
             <div class="card mb-0">
                 <div class="card-header" style="text-align: center; background:#ffffff">
                     <h4 class="titleCubo">Cubo de calculo de planilla</h4>
@@ -216,22 +205,21 @@
 
                         <div class="tab-pane" id="home1" role="tabpanel" aria-labelledby="home1-tab">
                             <p></p>
-                            <a href="@Url.Action("Index","CuboMaster")" class="btn btn-danger btn-sm" style="font-size:13px;font-weight:bold;float:left;">
+                            <a href="@Url.Action("Index", "CuboMaster")" class="btn btn-danger btn-sm" style="font-size:13px;font-weight:bold;float:left;">
                                 VOLVER PARAMETROS
                             </a>
-                            @*@Html.ActionLink("", "Index", "CuboMaster", null, new { @id = "btnXcube1", @class = "btn btn-danger btn-sm", @style = "font-size:13px;font-weight:bold;float:left;" })*@
                             <div class="col-sm-12">
                                 @(Html.C1().PivotEngine().Id("indexEngine")
-                                    .ShowRowTotals(ShowTotals.Subtotals)
-                                    .ShowColumnTotals(ShowTotals.Subtotals)
-                                    .TotalsBeforeData(false)
-                                    .SortableGroups(true)
-                                    .Bind(Model)
-                                    .RowFields(pfcb => pfcb.Items("TRABAJADOR"))
-                                    .ColumnFields(cfcb => cfcb.Items("COLUMNA"))
-                                    .ColumnFields(cfcb => cfcb.Items("CONCEPTO"))
-                                    .ValueFields(vfcb => vfcb.Items("VALOR"))
-                                    .ShowZeros(true)
+        .ShowRowTotals(ShowTotals.GrandTotals)
+        .ShowColumnTotals(ShowTotals.Subtotals)
+        .TotalsBeforeData(false)
+        .SortableGroups(true)
+        .Bind(Model)
+        .RowFields(pfcb => pfcb.Items("TRABAJADOR"))
+        .ColumnFields(cfcb => cfcb.Items("COLUMNA"))
+        .ColumnFields(cfcb => cfcb.Items("CONCEPTO"))
+        .ValueFields(vfcb => vfcb.Items("VALOR"))
+        .ShowZeros(true)
                                     )
                                 <div class="col-sm-12  col-md-12">
                                     @Html.C1().PivotPanel().Id(optionsModel.ControlId).ItemsSourceId("indexEngine").CssStyle("font-size", "11px")
@@ -239,9 +227,18 @@
                             </div>
                         </div>
                         <div class="tab-pane active" id="home2" role="tabpanel" aria-labelledby="home2-tab" aria-selected="true">
+                            <div id="divNotification">
+
+                            </div>
                             <div class="col-sm-12">
                                 <p></p>
                                 <div class="col-sm-12 col-md-12" style="text-align:right">
+                                    <!--<button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="loadView()">
+                                        CARGAR VISTA
+                                    </button>-->
+                                    <button type="button" class="btn btn-info" style="font-size:13px;font-weight:bold; float:right; width:15%; margin-left: 10px" id="btnGuardar">
+                                        GUARDAR VISTA
+                                    </button>
                                     <button type="button" class="btn btn-success" style="font-size:13px;font-weight:bold; float:right; width:15%" onclick="excelExport()">
                                         EXPORTAR EXCEL
                                     </button>
@@ -249,16 +246,10 @@
                                 <div class="table-responsive" style="text-align:center">
                                     <div class="col-sm-12 col-md-12">
                                         @(Html.C1().PivotGrid().Id("indexGrid").CssClass("custom")
-                                            .ItemsSourceId("indexEngine")
-                                            .OutlineMode(false)
-                                            .ShowValueFieldHeaders(true).CssStyle("font-size", "18px")
+        .ItemsSourceId("indexEngine")
+        .OutlineMode(false)
+        .ShowValueFieldHeaders(true).CssStyle("font-size", "18px")
                                             )
-                                        @*<p>
-                                                <span style="vertical-align:top; color:black;">
-                                                    OutlineMode&nbsp;<input id="outlineMode" type="checkbox" onchange="toggleOulineMode(event)" style="margin-right:5em;" />
-                                                    ShowValueFieldHeaders&nbsp;<input id="ShowValueFieldHeaders" type="checkbox" onchange="toggleShowValueFieldHeaders(event)" />
-                                                </span>
-                                            </p>*@
                                     </div>
 
                                 </div>
@@ -305,33 +296,81 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
     <script type="text/javascript">
         window.onload = function () {
+            if ("@Session["disenoCubo"].ToString()" != "") {
+                loadView();
+            }
         };
         function saveView() {
             var ng = c1.getService('indexEngine');
             if (ng && ng.isViewDefined) {
-                localStorage.viewDefinition = ng.viewDefinition;
+                saveCubo(ng.viewDefinition);
+                console.log(ng.viewDefinition);
+                //localStorage.viewDefinition = ng.viewDefinition;
             }
         }
+        function saveCubo(diseno) {
+            try {
+                let datos = {
+                    Diseno: diseno
+                };
+
+                $.post("SaveCubo", datos).done(function (e) {
+                    console.log(e);
+                    if (e.result === 1) {
+                        $("#divNotification").html("<div class=\"alert alert-success\" role=\"alert\"><small><b>Operación exitosa</b></small></div>");
+                        $("#divNotification").fadeTo(5000, 500).slideUp(500, function () {
+                            $("#divNotification").slideUp(500);
+                        });
+                    }
+                    else {
+                        $("#divNotification").html("<div class=\"alert alert-warning\" role=\"alert\"><small><b>" + e.message + "</b></small></div>");
+                        $("#divNotification").fadeTo(5000, 500).slideUp(500, function () {
+                            $("#divNotification").slideUp(500);
+                        });
+                    }
+                });
+            } catch (e) {
+                throw e;
+            }
+
+            // search();
+        }
+        $("#btnGuardar").on('click', function () {
+            saveView();
+        });
         function loadView() {
             var ng = c1.getService('indexEngine');
-            if (ng && localStorage.viewDefinition) {
-                ng.viewDefinition = localStorage.viewDefinition;
-                var cmbRowTotals = wijmo.Control.getControl('#RowTotals');
-                if (cmbRowTotals) {
-                    cmbRowTotals.selectedValue = ng.showRowTotals;
-                }
+            if (ng) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("getView", "Cubo")',
+                    data: '{}',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (success) {
+                        ng.viewDefinition = success;
+                        var cmbRowTotals = wijmo.Control.getControl('#RowTotals');
+                        if (cmbRowTotals) {
+                            cmbRowTotals.selectedValue = ng.showRowTotals;
+                        }
 
-                var cmbColTotals = wijmo.Control.getControl('#ColTotals');
-                if (cmbColTotals) {
-                    cmbColTotals.selectedValue = ng.showColumnTotals;
-                }
+                        var cmbColTotals = wijmo.Control.getControl('#ColTotals');
+                        if (cmbColTotals) {
+                            cmbColTotals.selectedValue = ng.showColumnTotals;
+                        }
 
-                var chkShowZeros = document.getElementById('ColTotals');
-                if (chkShowZeros) {
-                    chkShowZeros.checked = ng.showZeros;
-                }
+                        var chkShowZeros = document.getElementById('ColTotals');
+                        if (chkShowZeros) {
+                            chkShowZeros.checked = ng.showZeros;
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(textStatus);
+                    }
+                });
             }
         }
+
         function excelExport() {
             var pivotGrid = wijmo.Control.getControl('#indexGrid');
 

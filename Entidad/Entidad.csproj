@@ -80,6 +80,7 @@
     <Compile Include="Entity\Cubo_Planilla.cs" />
     <Compile Include="Entity\Detail1SlipPay.cs" />
     <Compile Include="Entity\DetailVacationByUser.cs" />
+    <Compile Include="Entity\DisenoCubo.cs" />
     <Compile Include="Entity\Ejercicio_ebl.cs" />
     <Compile Include="Entity\HeaderSlipPay.cs" />
     <Compile Include="Entity\iReports.cs" />

@@ -38,5 +38,15 @@ namespace Negocio
             TblUsuarioDA Proc = new TblUsuarioDA();
             return await Proc.listarCuboVacation(token, corporateId, id_compania, id_ejercicio, Proceso_Id, id_planilla, id_periodo, id_mes, id_cobertura);
         }
+        public async Task<RespuestaBE> getDisenoCubo(string token, string disenoCuboId)
+        {
+            TblUsuarioDA Proc = new TblUsuarioDA();
+            return await Proc.getDisenoCubo(token, disenoCuboId);
+        }
+        public async Task<RespuestaBE> saveCubo(string token, DisenoCubo ent)
+        {
+            TblUsuarioDA Proc = new TblUsuarioDA();
+            return await Proc.saveCubo(token, ent);
+        }
     }
 }
