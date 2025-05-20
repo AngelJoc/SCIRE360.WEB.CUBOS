@@ -78,8 +78,8 @@
         }
 
         .custom.wj-flexgrid {
-            border: black 2px solid;
-            border-radius: 0;
+            border: #969595 1px solid;
+            border-radius: 10px;
             margin-top: 15px;
         }
 
@@ -89,14 +89,14 @@
         }
 
         .custom .wj-colheaders .wj-cell {
-            background: #3FC1F4;
+            background: #B89EDE;
             color: #fff;
             text-align: center !important;
         }
 
         .custom .wj-rowheaders .wj-cell {
-            background: #3FC1F4;
-            color: #fff;
+            background: #fff;
+            color: #000;
         }
 
         .custom .wj-alt {
@@ -181,7 +181,7 @@
                             <div class="row">
                             </div>
                             <div class="row">
-                                <h4><i><b style="color: #3FC1F4">CUBO OLAP</b> | <span style="color: #187691; font-size: 12px;">Mediante esta pantalla podrá diseñar y gráficar el tipo de reporte que se desea</span></i></h4>
+                                <h4><i><b style="color: #B89EDE">CUBO OLAP</b> | <span style="color: #187691; font-size: 12px;">Mediante esta pantalla podrá diseñar y gráficar el tipo de reporte que se desea</span></i></h4>
                             </div>
                             <br />
                         </div>
@@ -303,11 +303,17 @@
                 loadView();
             }
         };
+        c1.documentReady(function () {
+            var engine = c1.getService('indexEngine');
+            var field = engine.fields.getField("VALOR");
+            var field2 = engine.fields.getField("BASICO");
+            field.format = "n2";
+            field2.format = "n2";
+        })
         function saveView() {
             var ng = c1.getService('indexEngine');
             if (ng && ng.isViewDefined) {
                 saveCubo(ng.viewDefinition);
-                console.log(ng.viewDefinition);
                 //localStorage.viewDefinition = ng.viewDefinition;
             }
         }

@@ -17,6 +17,10 @@ namespace Entidad
         public string OBSERVACIONES { get; set; }
         public string MOTIVO { get; set; }
         public Decimal? MONTO_DE_PRESTAMO { get; set; }
-        public Decimal? VALOR_CUOTA { get; set; }
+        public Decimal NRO_CUOTAS { get; set; }
+        public Decimal NRO_CUOTAS_PENDIENTES { get; set; }
+        public Decimal NRO_CUOTAS_CANCELADAS { get; set; }
+        public string PERIODO { get; set; }
+        public Decimal MONTO_CUOTA { get; set; }
     }
 }

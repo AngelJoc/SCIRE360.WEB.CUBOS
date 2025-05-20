@@ -74,6 +74,7 @@
     <Compile Include="Entity\CorreoBE.cs" />
     <Compile Include="Entity\CtaCteDetail_ebl.cs" />
     <Compile Include="Entity\CtaCte_ebl.cs" />
+    <Compile Include="Entity\Cubo_AsientoContable.cs" />
     <Compile Include="Entity\Cubo_CuentasCorrientes.cs" />
     <Compile Include="Entity\Cubo_Datos.cs" />
     <Compile Include="Entity\Cubo_Padron.cs" />

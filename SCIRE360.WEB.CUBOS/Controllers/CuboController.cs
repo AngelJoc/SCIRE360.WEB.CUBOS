@@ -336,7 +336,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             return View();
 
         }
-        public async Task<ActionResult> Cubo_Datos(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
+        public async Task<ActionResult> Cubo_Datos(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string ddl_asiento, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
             Session["corpotareId"] = corpotareId;
@@ -507,7 +507,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_Padron(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
+        public async Task<ActionResult> Cubo_Padron(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string ddl_asiento, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
 
@@ -680,7 +680,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_CuentasCorrientes(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
+        public async Task<ActionResult> Cubo_CuentasCorrientes(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string ddl_asiento, string cubo, string ddl_grafico, string disenoCuboId)
         {
 
             Session["iToken"] = "adadadadadawdaw";
@@ -852,7 +852,7 @@ namespace SCIRE360.WEB.CUBOS.Controllers
             }
             return View();
         }
-        public async Task<ActionResult> Cubo_Vacaciones(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string cubo, string ddl_grafico, string disenoCuboId)
+        public async Task<ActionResult> Cubo_Vacaciones(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string ddl_asiento, string cubo, string ddl_grafico, string disenoCuboId)
         {
             Session["iToken"] = "adadadadadawdaw";
 
@@ -896,6 +896,82 @@ namespace SCIRE360.WEB.CUBOS.Controllers
                     TblUsuarioNE Proc = new TblUsuarioNE();
                     List<Cubo_Vacation> Cubo_Vacation = new List<Cubo_Vacation>();
                     Cubo_Vacation = await Proc.listarCuboVacation(Session["iToken"].ToString(), corpotareId, ddl_companias, ddl_ejercicios, ddl_procesos, ddl_planillas, ddl_periodos, ddl_mess, ddl_coberturas);
+                    OlapModells.ControlId = "indexPanel";
+
+                    var engineModel1 = new ClientSettingsModel { Settings = new Dictionary<string, object[]>() };
+                    foreach (var item in OlapModells.Settings)
+                    {
+                        engineModel1.Settings.Add(item);
+                    }
+                    foreach (var chartItem in ChartSettings)
+                    {
+                        engineModel1.Settings.Add(chartItem);
+                    }
+                    engineModel1.ControlId = "chart";
+
+                    ViewBag.id_grafico = new SelectList(ChartSettings, "ChartType", "ChartType");
+
+                    ViewBag.DemoSettingsModel1 = engineModel1;
+                    ViewBag.DemoSettingsModel = OlapModells;
+
+                    return View(Cubo_Vacation);
+                }
+            }
+            else
+            {
+                Session["ConfigParam"] = 1;
+                defaultHREF = "setParametersinfo";
+                string strPage = defaultHREF;
+                return RedirectToAction("Index", strPage);
+            }
+            return View();
+        }
+        public async Task<ActionResult> Cubo_AsientosContables(string corpotareId, string ddl_compania, string ddl_planilla, string ddl_proceso, string ddl_cobertura, string ddl_ejercicio, string ddl_mes, string ddl_periodo, string ddl_asiento, string cubo, string ddl_grafico, string disenoCuboId)
+        {
+            Session["iToken"] = "adadadadadawdaw";
+
+            Session["corpotareId"] = corpotareId;
+
+            if (Session["corpotareId"].ToString() != null)
+            {
+                Session["ddl_compania"] = ddl_compania;
+                Session["ddl_planilla"] = ddl_planilla;
+                Session["ddl_proceso"] = ddl_proceso;
+                Session["ddl_cobertura"] = ddl_cobertura;
+                Session["ddl_ejercicio"] = ddl_ejercicio;
+                Session["ddl_mes"] = ddl_mes;
+                Session["ddl_periodo"] = ddl_periodo;
+                Session["ddl_asiento"] = ddl_asiento;
+
+                Session["cubo"] = cubo;
+                Session["ddl_grafico"] = ddl_grafico;
+
+                string ddl_companias = ""; string ddl_planillas = "";
+                string ddl_procesos = ""; string ddl_coberturas = "";
+                string ddl_ejercicios = ""; string ddl_mess = "";
+                string ddl_periodos = ""; string ddl_asientos = ""; string cubos = "";
+                string ddl_graficos = "";
+
+
+                ddl_companias = Session["ddl_compania"].ToString();
+                ddl_planillas = Session["ddl_planilla"].ToString();
+                ddl_procesos = Session["ddl_proceso"].ToString();
+                ddl_coberturas = Session["ddl_cobertura"].ToString();
+                ddl_ejercicios = Session["ddl_ejercicio"].ToString();
+                ddl_mess = Session["ddl_mes"].ToString();
+                ddl_periodos = Session["ddl_periodo"].ToString();
+                ddl_asientos = Session["ddl_asiento"].ToString();
+
+                cubos = Session["cubo"].ToString();
+                ddl_graficos = Session["ddl_grafico"].ToString();
+
+                await cargarDiseno(disenoCuboId);
+
+                if (cubos == "CuboAsientos")
+                {
+                    TblUsuarioNE Proc = new TblUsuarioNE();
+                    List<Cubo_AsientoContable> Cubo_Vacation = new List<Cubo_AsientoContable>();
+                    Cubo_Vacation = await Proc.listarCuboAsientoContable(Session["iToken"].ToString(), corpotareId, ddl_companias, ddl_ejercicios, ddl_procesos, ddl_planillas, ddl_periodos, ddl_mess, ddl_asientos, ddl_coberturas);
                     OlapModells.ControlId = "indexPanel";
 
                     var engineModel1 = new ClientSettingsModel { Settings = new Dictionary<string, object[]>() };

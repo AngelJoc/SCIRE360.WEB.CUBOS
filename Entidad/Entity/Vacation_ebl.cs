@@ -8,26 +8,23 @@ namespace Entidad
 {
     public partial class Cubo_Vacation
     {
-        //public Int64 ID { get; set; }
-        public string VACACIONES_ID { get; set; }
-        public string VACACIONES_PAGADAS_ID { get; set; }
-        public string PERSONAL_ID { get; set; }
         public string TRABAJADOR { get; set; }
-        public string PERIODO_ID { get; set; }
-        public string NOMBRE_DE_PERIODO { get; set; }
-        public DateTime? F_INICIO_PER_ANUAL { get; set; }
-        public DateTime? F_FIN_PER_ANUAL { get; set; }
-        public DateTime? F_SALIDA_VACACIONES { get; set; }
-        public DateTime? F_RETORNO_VACACIONES { get; set; }
-        public Int32? DIAS { get; set; }
-        public Int32? DIAS_PAGADOS { get; set; }
-        public Int32? DIAS_SALDO { get; set; }
-        public Int32? DIAS_SALIDA { get; set; }
-        public Int32? DIAS_SALIDA_SALDO { get; set; }
-        public Decimal? DIAS_GANADOS { get; set; }
-        public Decimal? DIAS_GANADOS_SALDO { get; set; }
-        public Int32? DIAS_TRUNCOS { get; set; }
-        public Decimal? VALOR { get; set; }
-
+        public DateTime? FECHA_DE_INGRESO { get; set; }
+        public DateTime? FECHA_DE_CORTE { get; set; }
+        public int? ITEM { get; set; }
+        public string PERIODO_VACACIONAL { get; set; }
+        public decimal DIAS { get; set; }
+        public decimal DIAS_PAGADOS { get; set; }
+        public decimal DIAS_SALDO { get; set; }
+        public decimal DIAS_GANADOS { get; set; }
+        public decimal DIAS_GANADOS_SALDO { get; set; }
+        public decimal DIAS_VENDIDOS { get; set; }
+        public decimal IMPORTE_TOTAL { get; set; }
+        public string PERIODO { get; set; }
+        public DateTime? INICIO_VACACIONES { get; set; }
+        public DateTime? FIN_VACACIONES { get; set; }
+        public bool VENDIDO { get; set; }
+        public decimal DIAS_VACACIONES { get; set; }
+        public decimal IMPORTE { get; set; }
     }
 }

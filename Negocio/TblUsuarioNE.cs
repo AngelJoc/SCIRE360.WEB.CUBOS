@@ -38,6 +38,11 @@ namespace Negocio
             TblUsuarioDA Proc = new TblUsuarioDA();
             return await Proc.listarCuboVacation(token, corporateId, id_compania, id_ejercicio, Proceso_Id, id_planilla, id_periodo, id_mes, id_cobertura);
         }
+        public async Task<List<Cubo_AsientoContable>> listarCuboAsientoContable(string token, string corporateId, string id_compania, string id_ejercicio, string Proceso_Id, string id_planilla, string id_periodo, string id_mes, string id_asiento, string id_cobertura)
+        {
+            TblUsuarioDA Proc = new TblUsuarioDA();
+            return await Proc.listarCuboAsientoContable(token, corporateId, id_compania, id_ejercicio, Proceso_Id, id_planilla, id_periodo, id_mes, id_asiento, id_cobertura);
+        }
         public async Task<RespuestaBE> getDisenoCubo(string token, string disenoCuboId)
         {
             TblUsuarioDA Proc = new TblUsuarioDA();

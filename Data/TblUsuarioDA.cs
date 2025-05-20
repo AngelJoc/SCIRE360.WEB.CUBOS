@@ -171,6 +171,7 @@ namespace Alvisoft.DataAccessLayer
                     corporateId = corporateId,
                     id_compania = id_compania,
                     id_ejercicio = id_ejercicio,
+                    Proceso_Id = Proceso_Id,
                     id_planilla = id_planilla,
                     id_periodo = id_periodo,
                     id_mes = id_mes,
@@ -215,8 +216,12 @@ namespace Alvisoft.DataAccessLayer
                 {
                     corporateId = corporateId,
                     id_compania = id_compania,
+                    id_ejercicio = id_ejercicio,
+                    Proceso_Id = Proceso_Id,
                     id_planilla = id_planilla,
                     id_periodo = id_periodo,
+                    id_mes = id_mes,
+                    id_cobertura = id_cobertura
                 };
                 StringContent _content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 HttpClientHandler _clientHandlerGQ = new HttpClientHandler();
@@ -234,6 +239,55 @@ namespace Alvisoft.DataAccessLayer
                         if (listaDes != null)
                         {
                             lista = JsonConvert.DeserializeObject<List<Cubo_Vacation>>(apiResponse);
+                        }
+                    }
+
+                    httpClient.Dispose();
+                    _clientHandlerGQ.Dispose();
+                }
+            }
+            catch (HttpException ex)
+            {
+                throw;
+            }
+
+            return lista;
+        }
+
+        public async Task<List<Cubo_AsientoContable>> listarCuboAsientoContable(string token, string corporateId, string id_compania, string id_ejercicio, string Proceso_Id, string id_planilla, string id_periodo, string id_mes, string id_asiento, string id_cobertura)
+        {
+            List<Cubo_AsientoContable> lista = new List<Cubo_AsientoContable>();
+
+            try
+            {
+                var data = new
+                {
+                    corporateId = corporateId,
+                    id_compania = id_compania,
+                    id_ejercicio = id_ejercicio,
+                    Proceso_Id = Proceso_Id,
+                    id_planilla = id_planilla,
+                    id_periodo = id_periodo,
+                    id_mes = id_mes,
+                    id_asiento = id_asiento,
+                    id_cobertura = id_cobertura
+                };
+                StringContent _content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                HttpClientHandler _clientHandlerGQ = new HttpClientHandler();
+                _clientHandlerGQ.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                using (var httpClient = new HttpClient(_clientHandlerGQ, false))
+                {
+                    httpClient.Timeout = TimeSpan.FromMinutes(5);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", token/*Session["iToken"].ToString()*/);
+                    string url = ConfigurationSettings.AppSettings["apiRest"].ToString() + "Cubos/listarCuboAsientoContable";
+                    using (var response = await httpClient.PostAsync(url, _content))
+                    {
+                        List<Cubo_AsientoContable> listaDes = new List<Cubo_AsientoContable>();
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        listaDes = JsonConvert.DeserializeObject<List<Cubo_AsientoContable>>(apiResponse);
+                        if (listaDes != null)
+                        {
+                            lista = JsonConvert.DeserializeObject<List<Cubo_AsientoContable>>(apiResponse);
                         }
                     }
 

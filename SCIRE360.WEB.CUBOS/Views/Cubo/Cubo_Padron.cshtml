@@ -224,9 +224,9 @@
                                     .TotalsBeforeData(false)
                                     .SortableGroups(true)
                                     .Bind(Model)
-                                    .RowFields(pfcb => pfcb.Items("AREA"))
-                                    .ColumnFields(cfcb => cfcb.Items("CENTRO_DE_COSTO"))
-                                    .ValueFields(vfcb => vfcb.Items("TRABAJADOR"))
+                                    .RowFields(pfcb => pfcb.Items("TRABAJADOR"))
+                                    //.ColumnFields(cfcb => cfcb.Items("CENTRO_DE_COSTO"))
+                                    .ValueFields(vfcb => vfcb.Items("CONTADOR"))
                                     .ShowZeros(true)
                                     )
                                 <div class="col-sm-12  col-md-12">
@@ -321,10 +321,17 @@
             var ng = c1.getService('indexEngine');
             if (ng && ng.isViewDefined) {
                 saveCubo(ng.viewDefinition);
-                console.log(ng.viewDefinition);
                 //localStorage.viewDefinition = ng.viewDefinition;
             }
         }
+        c1.documentReady(function () {
+            var engine = c1.getService('indexEngine');
+            var field = engine.fields.getField("CONTADOR");
+            //field.aggregate = wijmo.Aggregate.Avg;
+            field.format = "n2";
+            var field2 = engine.fields.getField("BASICO");
+            field2.format = "n2";
+        })
         function saveCubo(diseno) {
             try {
                 let datos = {

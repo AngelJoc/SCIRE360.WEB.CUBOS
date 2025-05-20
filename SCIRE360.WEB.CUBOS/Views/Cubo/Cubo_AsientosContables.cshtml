@@ -1,13 +1,13 @@
 ﻿@{
     Layout = null;
 }
-@model IEnumerable<Entidad.Cubo_Datos>
+@model IEnumerable<Entidad.Cubo_AsientoContable>
 @{
     ClientSettingsModel optionsModel = ViewBag.DemoSettingsModel;
     ClientSettingsModel optionsModel1 = ViewBag.DemoSettingsModel1;
 }
 @{
-    ViewBag.Title = "Cubo de datos - Scire 360";
+    ViewBag.Title = "Cubo de Asientos contables - Scire 360";
 }
 
 <!DOCTYPE html>
@@ -148,11 +148,11 @@
             border-top-left-radius: 0.25rem;
             border-top-right-radius: 0.25rem;
         }
+
         .nav-link {
             display: block;
             padding: 0.5rem 1rem;
         }
-                        
     </style>
 </head>
 <body>
@@ -182,7 +182,7 @@
             <!-- DataTables Example -->
             <div class="card mb-0">
                 <div class="card-header" style="text-align: center; background:#ffffff">
-                    <h4 class="titleCubo"><b>Cubo de datos</b></h4>
+                    <h4 class="titleCubo"><b>Cubo de Asientos Contables</b></h4>
                 </div>
 
                 <div class="card-body">
@@ -198,6 +198,8 @@
                     </div>
                     <div class="col-lg- d-none d-lg-block bg-register-image"></div>
                     <p></p>
+
+
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link " id="home1-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home1" aria-selected="true"><b>DATOS CUBO</b></a>
@@ -212,20 +214,19 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane " id="home1" role="tabpanel" aria-labelledby="home1-tab" aria-selected="true">
-                            <p></p>
-                            @Html.ActionLink("VOLVER PARAMETROS", "Index", "CuboMaster", null, new { @id = "btnXcube1", @class = "btn btn-danger btn-sm", @style = "color: white;font-size:13px;font-weight:bold;float:left;width:15%" })
                             <div class="col-sm-12">
                                 <p></p>
+                                @Html.ActionLink("VOLVER PARAMETROS", "Index", "CuboMaster", null, new { @id = "btnXcube1", @class = "btn btn-danger btn-sm", @style = "color: white;font-size:13px;font-weight:bold;float:left;width:15%" })
+                                <p></p>
                                 @(Html.C1().PivotEngine().Id("indexEngine")
-                                    .ShowRowTotals(ShowTotals.GrandTotals)
-                                    .ShowColumnTotals(ShowTotals.Subtotals)
+                                    //.ShowRowTotals(ShowTotals.Subtotals)
+                                    //.ShowColumnTotals(ShowTotals.Subtotals)
                                     .TotalsBeforeData(false)
                                     .SortableGroups(true)
                                     .Bind(Model)
-                                    .RowFields(pfcb => pfcb.Items("TRABAJADOR"))
-                                    .RowFields(pfcb => pfcb.Items("DNI"))
-                                    .ColumnFields(cfcb => cfcb.Items("CONCEPTO"))
-                                    .ValueFields(vfcb => vfcb.Items("VALOR"))
+                                    .RowFields(pfcb => pfcb.Items("PLAN_DE_CUENTA"))
+                                    .ValueFields(vfcb => vfcb.Items("DEBE"))
+                                    .ValueFields(vfcb => vfcb.Items("HABER"))
                                     .ShowZeros(true)
                                     )
                                 <div class="col-sm-12  col-md-12">
@@ -305,6 +306,7 @@
     </div>
 
 
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
     <script type="text/javascript">
         window.onload = function () {
@@ -314,9 +316,11 @@
         };
         c1.documentReady(function () {
             var engine = c1.getService('indexEngine');
-            var field = engine.fields.getField("VALOR");
+            var field = engine.fields.getField("DEBE");
+            var field2 = engine.fields.getField("HABER");
             //field.aggregate = wijmo.Aggregate.Avg;
             field.format = "n2";
+            field2.format = "n2";
         })
         function saveView() {
             var ng = c1.getService('indexEngine');
@@ -395,7 +399,7 @@
                 includeColumnHeaders: true,
                 includeRowHeaders: true
             });
-            book.sheets[0].name = 'CUBO DE DATOS';
+            book.sheets[0].name = 'CUBO DE ASIENTOS CONTABLES';
             addTitleCell(book.sheets[0], getViewTitle(pivotGrid.engine));
 
             // add sheet with transposed view
@@ -404,14 +408,14 @@
                 includeColumnHeaders: true,
                 includeRowHeaders: true
             });
-            transposed.sheets[0].name = 'CUBO DE DATOS VERTICAL';
+            transposed.sheets[0].name = 'CUBO DE VACACIONES VERTICAL';
             addTitleCell(transposed.sheets[0], getViewTitle(pivotGrid.engine));
             book.sheets.push(transposed.sheets[0]);
             transposeView(pivotGrid.engine);
             var f = new Date();
 
             // save the book
-            book.save('CUBO_DE_DATOS.OLAP.' + f.getDate() + "" + (f.getMonth() + 1) + "" + f.getFullYear() + '.xlsx');
+            book.save('CUBO_DE_ASIENTOS_CONTABLES.OLAP.' + f.getDate() + "" + (f.getMonth() + 1) + "" + f.getFullYear() + '.xlsx');
         }
 
         // build a title for the current view
